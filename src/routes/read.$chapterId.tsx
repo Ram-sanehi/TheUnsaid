@@ -1,6 +1,6 @@
 import { createFileRoute, Link, notFound } from "@tanstack/react-router";
 import { motion, useReducedMotion, useMotionValueEvent, useScroll } from "framer-motion";
-import { chapters, partColors, partTitles } from "../../data/chapters";
+import { chapters, partColors, partTitles, type Chapter, type ContentBlock } from "../data/chapters";
 import { useState, useEffect, useRef, useCallback } from "react";
 
 export const Route = createFileRoute("/read/$chapterId")({
