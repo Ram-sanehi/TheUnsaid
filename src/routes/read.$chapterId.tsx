@@ -203,7 +203,12 @@ function Reader({ ch }: { ch: typeof chapters[0] }) {
   }, [ch.id]);
 
   const handleTocNavigate = useCallback((cid: string) => {
-    navigate({ to: '/read/$chapterId', params: { chapterId: cid } }); setShowToc(false);
+    if (cid === '/') {
+      navigate({ to: '/' });
+    } else {
+      navigate({ to: '/read/$chapterId', params: { chapterId: cid } });
+    }
+    setShowToc(false);
   }, [navigate]);
 
   // Annotation handlers

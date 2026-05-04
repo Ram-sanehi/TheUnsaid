@@ -40,6 +40,13 @@ export function TocDrawer({ currentChapterId, onNavigate, onClose }: TocDrawerPr
         <div className="toc-handle" />
         <p className="toc-heading">Contents</p>
 
+        {/* Cover link */}
+        <div className="toc-row unread" onClick={() => onNavigate('/')}>
+          <span className="toc-ch-name">Cover Page</span>
+          <span className="toc-dots" />
+          <span className="toc-pg">i</span>
+        </div>
+
         {chapters.map((ch, idx) => {
           const showPart = ch.part !== lastPart;
           lastPart = ch.part;

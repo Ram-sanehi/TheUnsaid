@@ -71,6 +71,40 @@ function ChaptersPage() {
         }}>✦</div>
 
         <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+          {/* Cover Page entry */}
+          <motion.div
+            initial={{ opacity: 0, y: 12 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ duration: dur, ease }}
+          >
+            <Link
+              to="/"
+              style={{
+                display: 'block', padding: '1rem 1.25rem',
+                background: 'var(--surface)', borderRadius: '8px',
+                borderLeft: `3px solid var(--accent)`,
+                textDecoration: 'none', color: 'var(--fg)',
+                transition: 'background 0.15s',
+              }}
+              onMouseOver={e => (e.currentTarget.style.background = 'color-mix(in srgb, var(--accent) 8%, var(--surface))')}
+              onMouseOut={e => (e.currentTarget.style.background = 'var(--surface)')}
+            >
+              <div style={{ marginBottom: '0.35rem' }}>
+                <span style={{
+                  fontSize: '0.6rem', letterSpacing: '0.2em',
+                  textTransform: 'uppercase' as const, color: 'var(--accent)', opacity: 0.8,
+                }}>
+                  Front Matter
+                </span>
+              </div>
+              <h2 style={{
+                fontFamily: "'Playfair Display', Georgia, serif",
+                fontSize: '1.05rem', fontStyle: 'italic', fontWeight: 600,
+              }}>
+                Cover Page
+              </h2>
+            </Link>
+          </motion.div>
           {chapters.map((ch, i) => {
             const showPartHeader = ch.part !== lastPart;
             lastPart = ch.part;
