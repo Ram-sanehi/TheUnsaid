@@ -1,12 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "framer-motion";
 import { chapters, partColors, partTitles } from "../data/chapters";
+import { useState, useEffect } from "react";
 
 export const Route = createFileRoute("/chapters")({
   head: () => ({
     meta: [
       { title: "Chapters — The Girl Who Forgot Her Earrings" },
       { name: "description", content: "Browse all chapters of the novel by Raj Vishwakarma." },
+      { property: "og:title", content: "Chapters — The Girl Who Forgot Her Earrings" },
+      { property: "og:description", content: "Browse all 15 chapters across 4 parts of this deeply emotional Indian love story." },
     ],
   }),
   component: ChaptersPage,
@@ -16,6 +19,17 @@ function ChaptersPage() {
   const reduceMotion = useReducedMotion();
   const ease = [0.22, 1, 0.36, 1] as const;
   const dur = reduceMotion ? 0 : 0.6;
+
+  const [readProgress, setReadProgress] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const progress: Record<string, number> = {};
+    chapters.forEach(ch => {
+      const saved = localStorage.getItem(`reading-progress-${ch.id}`);
+      if (saved) progress[ch.id] = Number(saved);
+    });
+    setReadProgress(progress);
+  }, []);
 
   let lastPart = -1;
 
@@ -90,7 +104,7 @@ function ChaptersPage() {
                         className="text-[10px] tracking-[0.2em] uppercase"
                         style={{ fontFamily: 'var(--font-ui)', color: partColors[ch.part] }}
                       >
-                        {ch.chapterNumber === 0 ? 'Prologue' : `Chapter ${ch.chapterNumber}`}
+                        {ch.chapterNumber === 0 ? 'Prologue' : ch.chapterNumber === 14 ? 'Epilogue' : `Chapter ${ch.chapterNumber}`}
                       </span>
                       <span
                         className="text-[10px] tracking-wider"
@@ -113,6 +127,23 @@ function ChaptersPage() {
                     >
                       {ch.teaser}
                     </p>
+
+                    {/* Reading progress indicator */}
+                    {readProgress[ch.id] && readProgress[ch.id] > 0 && (
+                      <div className="mt-3 flex items-center gap-2">
+                        <div className="flex-1 h-[2px] rounded-full" style={{ background: 'var(--border)' }}>
+                          <div className="h-full rounded-full" style={{
+                            width: `${Math.min(100, readProgress[ch.id])}%`,
+                            background: partColors[ch.part],
+                            transition: 'width 0.3s ease',
+                          }} />
+                        </div>
+                        <span className="text-[9px] tracking-wider"
+                          style={{ fontFamily: 'var(--font-ui)', color: 'var(--muted-foreground)' }}>
+                          {readProgress[ch.id] >= 95 ? '✓' : `${Math.round(readProgress[ch.id])}%`}
+                        </span>
+                      </div>
+                    )}
                   </Link>
                 </motion.div>
               </div>

@@ -1,5 +1,5 @@
 export interface ContentBlock {
-  type: 'paragraph' | 'pullquote' | 'divider';
+  type: 'paragraph' | 'pullquote' | 'divider' | 'letter' | 'poem';
   text?: string;
 }
 
@@ -9,9 +9,11 @@ export interface Chapter {
   partTitle: string;
   chapterNumber: number;
   title: string;
+  subtitle?: string;
   teaser: string;
   wordCount: number;
   readTimeMinutes: number;
+  specialTreatment?: 'prologue' | 'letter' | 'rain' | 'diagnosis' | 'epilogue' | 'wedding' | 'lastday';
   content: ContentBlock[];
 }
 
