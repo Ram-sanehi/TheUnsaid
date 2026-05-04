@@ -104,7 +104,7 @@ function ChaptersPage() {
                         className="text-[10px] tracking-[0.2em] uppercase"
                         style={{ fontFamily: 'var(--font-ui)', color: partColors[ch.part] }}
                       >
-                        {ch.chapterNumber === 0 ? 'Prologue' : `Chapter ${ch.chapterNumber}`}
+                        {ch.chapterNumber === 0 ? 'Prologue' : ch.chapterNumber === 14 ? 'Epilogue' : `Chapter ${ch.chapterNumber}`}
                       </span>
                       <span
                         className="text-[10px] tracking-wider"
