@@ -273,10 +273,62 @@ export function BookFeedback() {
             <p style={{
               fontFamily: "'Palatino Linotype', Georgia, serif",
               fontSize: '0.75rem', color: 'var(--muted)',
-              letterSpacing: '0.1em',
+              letterSpacing: '0.1em', marginBottom: '2rem',
             }}>
               — Raj Vishwakarma
             </p>
+
+            {/* Social links */}
+            <p style={{
+              fontFamily: "'Palatino Linotype', Georgia, serif",
+              fontSize: '0.6rem', letterSpacing: '0.2em',
+              textTransform: 'uppercase', color: 'rgba(201,168,76,0.5)',
+              marginBottom: '0.75rem',
+            }}>follow the author</p>
+
+            <div style={{
+              display: 'flex', justifyContent: 'center', gap: '0.4rem', flexWrap: 'wrap',
+            }}>
+              {[
+                { label: 'Instagram', icon: '📸', url: 'https://instagram.com/raj_vishwakarma' },
+                { label: 'Facebook',  icon: '📘', url: 'https://facebook.com/raj.vishwakarma' },
+                { label: 'LinkedIn',  icon: '💼', url: 'https://linkedin.com/in/raj-vishwakarma' },
+                { label: 'X',         icon: '𝕏',  url: 'https://x.com/raj_vishwakarma' },
+                { label: 'Medium',    icon: '✍️', url: 'https://medium.com/@raj-vishwakarma' },
+                { label: 'YouTube',   icon: '▶️', url: 'https://youtube.com/@raj-vishwakarma' },
+              ].map(s => (
+                <a
+                  key={s.label}
+                  href={s.url}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  title={s.label}
+                  style={{
+                    display: 'inline-flex', alignItems: 'center', gap: '0.3rem',
+                    padding: '0.35rem 0.75rem',
+                    borderRadius: '999px',
+                    border: '1px solid rgba(255,255,255,0.08)',
+                    background: 'rgba(255,255,255,0.02)',
+                    color: 'var(--muted)',
+                    fontFamily: "'Palatino Linotype', Georgia, serif",
+                    fontSize: '0.72rem',
+                    textDecoration: 'none',
+                    transition: 'all 0.2s',
+                  }}
+                  onMouseOver={e => {
+                    e.currentTarget.style.borderColor = 'rgba(201,168,76,0.35)';
+                    e.currentTarget.style.color = '#c9a84c';
+                  }}
+                  onMouseOut={e => {
+                    e.currentTarget.style.borderColor = 'rgba(255,255,255,0.08)';
+                    e.currentTarget.style.color = 'var(--muted)';
+                  }}
+                >
+                  <span style={{ fontSize: '0.85rem' }}>{s.icon}</span>
+                  {s.label}
+                </a>
+              ))}
+            </div>
           </motion.div>
         )}
 

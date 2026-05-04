@@ -169,6 +169,55 @@ function CoverPage() {
         )}
       </motion.div>
 
+      {/* Social Icons at the very bottom */}
+      <motion.div
+        initial={{ opacity: 0 }}
+        animate={{ opacity: 1 }}
+        transition={{ duration: 1, delay: 1.5 }}
+        style={{
+          position: 'absolute',
+          bottom: '2rem',
+          display: 'flex',
+          gap: '1rem',
+          opacity: 0.6
+        }}
+      >
+        {[
+          { icon: '📸', url: 'https://instagram.com/raj_vishwakarma', label: 'Instagram' },
+          { icon: '📘', url: 'https://facebook.com/raj.vishwakarma', label: 'Facebook' },
+          { icon: '💼', url: 'https://linkedin.com/in/raj-vishwakarma', label: 'LinkedIn' },
+          { icon: '𝕏',  url: 'https://x.com/raj_vishwakarma', label: 'Twitter' },
+          { icon: '✍️', url: 'https://medium.com/@raj-vishwakarma', label: 'Medium' },
+          { icon: '▶️', url: 'https://youtube.com/@raj-vishwakarma', label: 'YouTube' }
+        ].map(s => (
+          <a
+            key={s.label}
+            href={s.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ 
+              textDecoration: 'none', 
+              fontSize: '1.2rem',
+              filter: 'grayscale(1)',
+              transition: 'all 0.3s'
+            }}
+            onMouseOver={e => {
+              e.currentTarget.style.filter = 'grayscale(0)';
+              e.currentTarget.style.transform = 'scale(1.2)';
+              e.currentTarget.style.opacity = '1';
+            }}
+            onMouseOut={e => {
+              e.currentTarget.style.filter = 'grayscale(1)';
+              e.currentTarget.style.transform = 'scale(1)';
+              e.currentTarget.style.opacity = '0.6';
+            }}
+            title={s.label}
+          >
+            {s.icon}
+          </a>
+        ))}
+      </motion.div>
+
     </div>
   );
 }
