@@ -1,12 +1,15 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "framer-motion";
 import { chapters, partColors, partTitles } from "../data/chapters";
+import { useState, useEffect } from "react";
 
 export const Route = createFileRoute("/chapters")({
   head: () => ({
     meta: [
       { title: "Chapters — The Girl Who Forgot Her Earrings" },
       { name: "description", content: "Browse all chapters of the novel by Raj Vishwakarma." },
+      { property: "og:title", content: "Chapters — The Girl Who Forgot Her Earrings" },
+      { property: "og:description", content: "Browse all 15 chapters across 4 parts of this deeply emotional Indian love story." },
     ],
   }),
   component: ChaptersPage,
