@@ -20,6 +20,17 @@ function ChaptersPage() {
   const ease = [0.22, 1, 0.36, 1] as const;
   const dur = reduceMotion ? 0 : 0.6;
 
+  const [readProgress, setReadProgress] = useState<Record<string, number>>({});
+
+  useEffect(() => {
+    const progress: Record<string, number> = {};
+    chapters.forEach(ch => {
+      const saved = localStorage.getItem(`reading-progress-${ch.id}`);
+      if (saved) progress[ch.id] = Number(saved);
+    });
+    setReadProgress(progress);
+  }, []);
+
   let lastPart = -1;
 
   return (
