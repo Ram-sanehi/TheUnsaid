@@ -1,15 +1,14 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { motion, useReducedMotion } from "framer-motion";
-import { chapters, partColors, partTitles } from "../data/chapters";
+import { chapters, partTitles } from "../data/chapters";
 import { useState, useEffect } from "react";
+import { useTheme } from "../hooks/useTheme";
 
 export const Route = createFileRoute("/chapters")({
   head: () => ({
     meta: [
       { title: "Chapters — The Girl Who Forgot Her Earrings" },
       { name: "description", content: "Browse all chapters of the novel by Raj Vishwakarma." },
-      { property: "og:title", content: "Chapters — The Girl Who Forgot Her Earrings" },
-      { property: "og:description", content: "Browse all 15 chapters across 4 parts of this deeply emotional Indian love story." },
     ],
   }),
   component: ChaptersPage,
@@ -17,8 +16,9 @@ export const Route = createFileRoute("/chapters")({
 
 function ChaptersPage() {
   const reduceMotion = useReducedMotion();
+  const { theme } = useTheme();
+  const dur = reduceMotion ? 0 : 0.5;
   const ease = [0.22, 1, 0.36, 1] as const;
-  const dur = reduceMotion ? 0 : 0.6;
 
   const [readProgress, setReadProgress] = useState<Record<string, number>>({});
 
@@ -34,113 +34,142 @@ function ChaptersPage() {
   let lastPart = -1;
 
   return (
-    <div className="grain-overlay vignette min-h-screen">
-      <div className="max-w-2xl mx-auto px-6 py-16 md:py-24">
+    <div data-theme={theme} style={{
+      minHeight: '100vh', background: 'var(--bg)', color: 'var(--fg)',
+      transition: 'background 0.4s, color 0.4s',
+    }}>
+      <div style={{ maxWidth: 640, margin: '0 auto', padding: '3rem 1.5rem 4rem' }}>
+
         <Link
           to="/"
-          className="inline-flex items-center gap-2 text-xs tracking-widest uppercase mb-12"
-          style={{ fontFamily: 'var(--font-ui)', color: 'var(--muted-foreground)' }}
+          style={{
+            display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+            fontSize: '0.7rem', letterSpacing: '0.15em', textTransform: 'uppercase' as const,
+            color: 'var(--muted)', textDecoration: 'none', marginBottom: '2.5rem',
+            fontFamily: "'Palatino Linotype', Georgia, serif",
+          }}
         >
           ← Home
         </Link>
 
         <motion.h1
-          className="text-3xl md:text-4xl font-bold italic mb-2"
-          style={{ fontFamily: 'var(--font-display)' }}
-          initial={{ opacity: 0, y: 20 }}
+          style={{
+            fontFamily: "'Playfair Display', Georgia, serif",
+            fontSize: 'clamp(1.8rem, 5vw, 2.4rem)',
+            fontStyle: 'italic', color: 'var(--fg)', marginBottom: '0.5rem',
+          }}
+          initial={{ opacity: 0, y: 16 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: dur, ease }}
         >
-          Table of Contents
+          Contents
         </motion.h1>
 
-        <div className="ornament-divider mb-8">✦</div>
+        <div style={{
+          textAlign: 'center', color: 'var(--accent)', fontSize: '0.9rem',
+          marginBottom: '2rem', opacity: 0.6,
+        }}>✦</div>
 
-        <div className="space-y-4">
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
           {chapters.map((ch, i) => {
             const showPartHeader = ch.part !== lastPart;
             lastPart = ch.part;
+            const progress = readProgress[ch.id] ?? 0;
+            const isRead = progress >= 95;
 
             return (
               <div key={ch.id}>
                 {showPartHeader && (
                   <motion.div
-                    className="py-6 text-center"
+                    style={{ padding: '1.5rem 0 0.5rem', textAlign: 'center' }}
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
                     transition={{ duration: dur }}
                   >
-                    <p
-                      className="text-xs tracking-[0.3em] uppercase"
-                      style={{ fontFamily: 'var(--font-ui)', color: partColors[ch.part] }}
-                    >
+                    <p style={{
+                      fontSize: '0.65rem', letterSpacing: '0.35em',
+                      textTransform: 'uppercase' as const, color: 'var(--accent)', opacity: 0.7,
+                      fontVariant: 'small-caps',
+                    }}>
                       {partTitles[ch.part]}
                     </p>
-                    <p className="mt-1 italic text-sm" style={{ fontFamily: 'var(--font-quote)', color: 'var(--muted-foreground)' }}>
+                    <p style={{
+                      fontStyle: 'italic', fontSize: '0.85rem', color: 'var(--muted)',
+                      marginTop: '0.2rem',
+                    }}>
                       {ch.partTitle}
                     </p>
                   </motion.div>
                 )}
 
                 <motion.div
-                  initial={{ opacity: 0, y: 20 }}
+                  initial={{ opacity: 0, y: 12 }}
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
-                  transition={{ duration: dur, ease, delay: (i % 5) * 0.08 }}
+                  transition={{ duration: dur, ease, delay: (i % 5) * 0.06 }}
                 >
                   <Link
                     to="/read/$chapterId"
                     params={{ chapterId: ch.id }}
-                    className="chapter-card block rounded-lg p-5 md:p-6"
                     style={{
-                      backgroundColor: 'var(--card)',
-                      borderLeftWidth: '3px',
-                      borderLeftColor: partColors[ch.part],
+                      display: 'block', padding: '1rem 1.25rem',
+                      background: 'var(--surface)', borderRadius: '8px',
+                      borderLeft: `3px solid var(--accent)`,
+                      textDecoration: 'none', color: 'var(--fg)',
+                      transition: 'background 0.15s',
                     }}
+                    onMouseOver={e => (e.currentTarget.style.background = 'color-mix(in srgb, var(--accent) 8%, var(--surface))')}
+                    onMouseOut={e => (e.currentTarget.style.background = 'var(--surface)')}
                   >
-                    <div className="flex items-center justify-between mb-2">
-                      <span
-                        className="text-[10px] tracking-[0.2em] uppercase"
-                        style={{ fontFamily: 'var(--font-ui)', color: partColors[ch.part] }}
-                      >
+                    <div style={{
+                      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+                      marginBottom: '0.35rem',
+                    }}>
+                      <span style={{
+                        fontSize: '0.6rem', letterSpacing: '0.2em',
+                        textTransform: 'uppercase' as const, color: 'var(--accent)', opacity: 0.8,
+                      }}>
                         {ch.chapterNumber === 0 ? 'Prologue' : ch.chapterNumber === 14 ? 'Epilogue' : `Chapter ${ch.chapterNumber}`}
                       </span>
-                      <span
-                        className="text-[10px] tracking-wider"
-                        style={{ fontFamily: 'var(--font-ui)', color: 'var(--muted-foreground)' }}
-                      >
-                        {ch.readTimeMinutes} min read
+                      <span style={{ fontSize: '0.6rem', letterSpacing: '0.1em', color: 'var(--muted)' }}>
+                        {ch.readTimeMinutes} min
                       </span>
                     </div>
 
-                    <h2
-                      className="text-lg md:text-xl font-bold italic"
-                      style={{ fontFamily: 'var(--font-display)', color: 'var(--foreground)' }}
-                    >
+                    <h2 style={{
+                      fontFamily: "'Playfair Display', Georgia, serif",
+                      fontSize: '1.05rem', fontStyle: 'italic', fontWeight: 600,
+                    }}>
                       {ch.title}
                     </h2>
 
-                    <p
-                      className="mt-2 text-sm leading-relaxed line-clamp-2"
-                      style={{ fontFamily: 'var(--font-body)', color: 'var(--muted-foreground)' }}
-                    >
+                    <p style={{
+                      marginTop: '0.4rem', fontSize: '0.82rem', lineHeight: 1.55,
+                      color: 'var(--muted)',
+                      display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical' as const,
+                      overflow: 'hidden',
+                    }}>
                       {ch.teaser}
                     </p>
 
-                    {/* Reading progress indicator */}
-                    {readProgress[ch.id] && readProgress[ch.id] > 0 && (
-                      <div className="mt-3 flex items-center gap-2">
-                        <div className="flex-1 h-[2px] rounded-full" style={{ background: 'var(--border)' }}>
-                          <div className="h-full rounded-full" style={{
-                            width: `${Math.min(100, readProgress[ch.id])}%`,
-                            background: partColors[ch.part],
-                            transition: 'width 0.3s ease',
+                    {progress > 0 && (
+                      <div style={{
+                        marginTop: '0.6rem', display: 'flex', alignItems: 'center', gap: '0.5rem',
+                      }}>
+                        <div style={{
+                          flex: 1, height: 2, borderRadius: 1,
+                          background: 'var(--border)',
+                        }}>
+                          <div style={{
+                            height: '100%', borderRadius: 1,
+                            background: 'var(--accent)',
+                            width: `${Math.min(100, progress)}%`,
+                            transition: 'width 0.3s',
                           }} />
                         </div>
-                        <span className="text-[9px] tracking-wider"
-                          style={{ fontFamily: 'var(--font-ui)', color: 'var(--muted-foreground)' }}>
-                          {readProgress[ch.id] >= 95 ? '✓' : `${Math.round(readProgress[ch.id])}%`}
+                        <span style={{ fontSize: '0.55rem', color: 'var(--muted)', letterSpacing: '0.1em' }}>
+                          {isRead ? '✓' : `${Math.round(progress)}%`}
                         </span>
                       </div>
                     )}

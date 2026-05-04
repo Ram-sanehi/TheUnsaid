@@ -4,8 +4,10 @@ export interface Highlight {
   id: string;
   chapterId: string;
   paragraphIndex: number;
+  startOffset?: number;
+  endOffset?: number;
   text: string;
-  color: 'yellow' | 'pink' | 'green';
+  color: 'yellow' | 'pink' | 'green' | 'underline';
   timestamp: number;
 }
 
