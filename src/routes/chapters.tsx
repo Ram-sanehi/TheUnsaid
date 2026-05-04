@@ -127,6 +127,23 @@ function ChaptersPage() {
                     >
                       {ch.teaser}
                     </p>
+
+                    {/* Reading progress indicator */}
+                    {readProgress[ch.id] && readProgress[ch.id] > 0 && (
+                      <div className="mt-3 flex items-center gap-2">
+                        <div className="flex-1 h-[2px] rounded-full" style={{ background: 'var(--border)' }}>
+                          <div className="h-full rounded-full" style={{
+                            width: `${Math.min(100, readProgress[ch.id])}%`,
+                            background: partColors[ch.part],
+                            transition: 'width 0.3s ease',
+                          }} />
+                        </div>
+                        <span className="text-[9px] tracking-wider"
+                          style={{ fontFamily: 'var(--font-ui)', color: 'var(--muted-foreground)' }}>
+                          {readProgress[ch.id] >= 95 ? '✓' : `${Math.round(readProgress[ch.id])}%`}
+                        </span>
+                      </div>
+                    )}
                   </Link>
                 </motion.div>
               </div>
