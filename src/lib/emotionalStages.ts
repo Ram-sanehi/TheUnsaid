@@ -7,11 +7,11 @@ export interface EmotionalStage {
 }
 
 export const EMOTIONAL_STAGES: EmotionalStage[] = [
-  { label: 'Calm',        threshold: 0,   color: '#8fa8a0' },
-  { label: 'Falling',     threshold: 20,  color: '#a89880' },
-  { label: 'Heavy',       threshold: 45,  color: '#c9a84c' },
-  { label: 'Breaking',    threshold: 68,  color: '#d4846a' },
-  { label: 'Letting go',  threshold: 85,  color: '#b5a9d4' },
+  { label: "Calm", threshold: 0, color: "#8fa8a0" },
+  { label: "Falling", threshold: 20, color: "#a89880" },
+  { label: "Heavy", threshold: 45, color: "#c9a84c" },
+  { label: "Breaking", threshold: 68, color: "#d4846a" },
+  { label: "Letting go", threshold: 85, color: "#b5a9d4" },
 ];
 
 export function getStageForProgress(pct: number): EmotionalStage {

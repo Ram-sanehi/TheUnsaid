@@ -1,6 +1,6 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback, useEffect } from "react";
 
-export type ShelfContentType = 'highlight' | 'note';
+export type ShelfContentType = "highlight" | "note";
 
 export interface ShelfItem {
   id: string;
@@ -12,13 +12,15 @@ export interface ShelfItem {
   optionalTag?: string;
 }
 
-const KEY = 'tgwfhe_shelf';
+const KEY = "tgwfhe_shelf";
 
 function load(): ShelfItem[] {
   try {
     const s = localStorage.getItem(KEY);
     return s ? JSON.parse(s) : [];
-  } catch { return []; }
+  } catch {
+    return [];
+  }
 }
 
 function save(items: ShelfItem[]) {
@@ -32,11 +34,11 @@ export function useMemoryShelf() {
     setItems(load().sort((a, b) => b.createdAt - a.createdAt));
   }, []);
 
-  const addToShelf = useCallback((item: Omit<ShelfItem, 'id' | 'createdAt'>) => {
+  const addToShelf = useCallback((item: Omit<ShelfItem, "id" | "createdAt">) => {
     const full: ShelfItem = { ...item, id: crypto.randomUUID(), createdAt: Date.now() };
     const all = load();
     // Avoid duplicates by text
-    if (all.some(i => i.text === item.text)) return;
+    if (all.some((i) => i.text === item.text)) return;
     all.unshift(full);
     save(all);
     setItems(all);
@@ -44,13 +46,13 @@ export function useMemoryShelf() {
   }, []);
 
   const removeFromShelf = useCallback((id: string) => {
-    const next = load().filter(i => i.id !== id);
+    const next = load().filter((i) => i.id !== id);
     save(next);
     setItems(next);
   }, []);
 
   const isOnShelf = useCallback((text: string) => {
-    return load().some(i => i.text === text);
+    return load().some((i) => i.text === text);
   }, []);
 
   const getAllItems = useCallback(() => load(), []);

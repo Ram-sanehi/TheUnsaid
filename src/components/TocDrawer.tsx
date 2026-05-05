@@ -1,6 +1,6 @@
-import { chapters, partTitles, type Chapter } from '../data/chapters';
-import { useEffect, useState } from 'react';
-import { motion, AnimatePresence } from 'framer-motion';
+import { chapters, partTitles, type Chapter } from "../data/chapters";
+import { useEffect, useState } from "react";
+import { motion, AnimatePresence } from "framer-motion";
 
 interface TocDrawerProps {
   currentChapterId: string;
@@ -14,10 +14,10 @@ export function TocDrawer({ currentChapterId, onNavigate, onClose }: TocDrawerPr
   useEffect(() => {
     const s = new Set<string>();
     try {
-      const saved = localStorage.getItem('tgwfhe_readPages');
+      const saved = localStorage.getItem("tgwfhe_readPages");
       if (saved) JSON.parse(saved).forEach((id: string) => s.add(id));
     } catch {}
-    chapters.forEach(ch => {
+    chapters.forEach((ch) => {
       const p = localStorage.getItem(`reading-progress-${ch.id}`);
       if (p && Number(p) > 40) s.add(ch.id);
     });
@@ -32,16 +32,16 @@ export function TocDrawer({ currentChapterId, onNavigate, onClose }: TocDrawerPr
       <motion.div
         key="sheet"
         className="toc-sheet"
-        initial={{ y: '100%' }}
+        initial={{ y: "100%" }}
         animate={{ y: 0 }}
-        exit={{ y: '100%' }}
+        exit={{ y: "100%" }}
         transition={{ duration: 0.32, ease: [0.22, 1, 0.36, 1] }}
       >
         <div className="toc-handle" />
         <p className="toc-heading">Contents</p>
 
         {/* Cover link */}
-        <div className="toc-row unread" onClick={() => onNavigate('/')}>
+        <div className="toc-row unread" onClick={() => onNavigate("/")}>
           <span className="toc-ch-name">Cover Page</span>
           <span className="toc-dots" />
           <span className="toc-pg">i</span>
@@ -62,12 +62,16 @@ export function TocDrawer({ currentChapterId, onNavigate, onClose }: TocDrawerPr
                 </div>
               )}
               <div
-                className={`toc-row ${isCurrent ? 'current' : ''} ${!isRead ? 'unread' : ''}`}
+                className={`toc-row ${isCurrent ? "current" : ""} ${!isRead ? "unread" : ""}`}
                 onClick={() => onNavigate(ch.id)}
               >
                 {isRead && !isCurrent && <span className="toc-read-dot" />}
                 <span className="toc-ch-name">
-                  {ch.chapterNumber === 0 ? 'Prologue' : ch.chapterNumber === 14 ? 'Epilogue' : `${ch.chapterNumber}. ${ch.title}`}
+                  {ch.chapterNumber === 0
+                    ? "Prologue"
+                    : ch.chapterNumber === 14
+                      ? "Epilogue"
+                      : `${ch.chapterNumber}. ${ch.title}`}
                 </span>
                 <span className="toc-dots" />
                 <span className="toc-pg">{pgNum}</span>
