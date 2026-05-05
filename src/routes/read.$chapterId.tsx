@@ -132,8 +132,9 @@ function Reader({ ch }: { ch: typeof chapters[0] }) {
   const [expandedReactions, setExpandedReactions] = useState<number | null>(null);
   const emotionalStage = getStageForProgress(progress);
 
-  // Next chapter
+  // Prev / Next chapter
   const chIdx = chapters.findIndex(c => c.id === ch.id);
+  const prevCh = chIdx > 0 ? chapters[chIdx - 1] : null;
   const nextCh = chIdx < chapters.length - 1 ? chapters[chIdx + 1] : null;
   const transitionQuote = TRANSITION_QUOTES[chIdx % TRANSITION_QUOTES.length];
 
@@ -303,7 +304,25 @@ function Reader({ ch }: { ch: typeof chapters[0] }) {
 
       {/* Top toolbar — hidden in immersive mode */}
       {!immersive && (
-        <div className="reader-toolbar" onClick={e => e.stopPropagation()} style={{ justifyContent: 'center' }}>
+        <div className="reader-toolbar" onClick={e => e.stopPropagation()} style={{ justifyContent: 'space-between' }}>
+          {/* Previous chapter arrow */}
+          <button
+            className="tb-btn"
+            onClick={() => prevCh && navigate({ to: '/read/$chapterId', params: { chapterId: prevCh.id } })}
+            title={prevCh ? `← ${prevCh.title}` : ''}
+            disabled={!prevCh}
+            aria-label="Previous chapter"
+            style={{
+              opacity: prevCh ? 1 : 0,
+              pointerEvents: prevCh ? 'auto' : 'none',
+              fontSize: '1.1rem',
+              letterSpacing: 0,
+              minWidth: 36,
+            }}
+          >
+            ←
+          </button>
+
           <div className="toolbar-actions">
             <button className="tb-btn" onClick={() => changeFontSize(-1)} aria-label="Smaller">A<sup style={{fontSize:'0.6em'}}>−</sup></button>
             <button className="tb-btn" onClick={() => changeFontSize(1)} aria-label="Larger">A<sup style={{fontSize:'0.6em'}}>+</sup></button>
@@ -318,6 +337,9 @@ function Reader({ ch }: { ch: typeof chapters[0] }) {
               style={{ fontSize: '0.75rem', letterSpacing: '0.05em' }}
             >⊙</button>
           </div>
+
+          {/* Spacer to balance the left arrow */}
+          <div style={{ minWidth: 36 }} />
         </div>
       )}
 
@@ -403,7 +425,7 @@ function Reader({ ch }: { ch: typeof chapters[0] }) {
             <div className="card-chapter-end">✦ ✦ ✦</div>
 
             {/* Feedback — only on last chapter */}
-            {ch.id === 'chapter-14' && <BookFeedback />}
+            {ch.id === 'authors-note' && <BookFeedback />}
 
             {/* Next Chapter CTA */}
             {nextCh && (
